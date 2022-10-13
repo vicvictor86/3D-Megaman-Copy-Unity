@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,15 +10,15 @@ public class Player : MonoBehaviour
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpHeight = 1.0f;
     
-    private Vector3 playerVelocity;
-    private bool groundedPlayer;
-    private const float GravityValue = -9.81f;
-
-    private CharacterController controller;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask ground;
+    [SerializeField] private float sizeGroundCheck = 1.0f;
     
+    private Rigidbody rb;
+
     private void Start()
     {
-        controller = gameObject.GetComponent<CharacterController>();
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -27,28 +28,33 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        groundedPlayer = controller.isGrounded;
-        if (groundedPlayer && playerVelocity.y < 0)
+        var horizontalInput = Input.GetAxis("Horizontal");
+        var verticalInput = Input.GetAxis("Vertical");
+
+        rb.velocity = new Vector3(horizontalInput * playerSpeed, rb.velocity.y, verticalInput * playerSpeed);
+
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            playerVelocity.y = 0f;
+            Jump();
         }
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, sizeGroundCheck);
+    }
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
-        controller.Move(move * (Time.deltaTime * playerSpeed));
-
-        if (move != Vector3.zero)
-        {
-            gameObject.transform.forward = move;
-        }
-
-        // Changes the height position of the player..
-        if (Input.GetButtonDown("Jump") && groundedPlayer)
-        {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * GravityValue);
-        }
-
-        playerVelocity.y += GravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
+    private bool IsGrounded()
+    {
+        return Physics.CheckSphere(groundCheck.position, sizeGroundCheck, ground);
+    }
+    
+    private void Jump()
+    {
+        var velocity = rb.velocity;
+        velocity = new Vector3(velocity.x, jumpHeight, velocity.z);
+        rb.velocity = velocity;
     }
 
     public int TakeDamage(int damage)

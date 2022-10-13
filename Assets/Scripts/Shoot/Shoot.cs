@@ -5,18 +5,21 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
-
-    [SerializeField] private float speed = 0;
-    private const float LivingColdDown = 3;
-    private float livingTime = 0;
-    private Rigidbody rgBody;
-    private Transform objectTransform;
+    private string target;
     
-    // Start is called before the first frame update
+    private const float LivingColdDown = 3;
+    private float livingTime;
+    
+    private Rigidbody rgBody;
+    private Vector3 shootDirection;
+
+    private int damage;
+    
     private void Start()
     {
         rgBody = gameObject.GetComponent<Rigidbody>();
-        rgBody.velocity = objectTransform.forward * 2;
+        rgBody.velocity = shootDirection;
+        
     }
 
     private void Update()
@@ -24,16 +27,25 @@ public class Shoot : MonoBehaviour
         TimeLiving();
     }
 
-    public void Move(Transform updateObjectTransform)
+    public void SetProperties(Vector3 updateShootDirection, string updateTarget, int updateDamage)
     {
-        objectTransform = updateObjectTransform;
+        shootDirection = updateShootDirection;
+        target = updateTarget;
+        damage = updateDamage;
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag(target))
         {
-            other.GetComponent<Enemy>().TakeDamage(1);
+            if (target == "Player")
+            {
+                other.GetComponent<Player>().TakeDamage(damage);
+            }
+            else if (target == "Enemy")
+            {
+                other.GetComponent<Enemy>().TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
     }

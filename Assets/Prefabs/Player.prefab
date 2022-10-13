@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &499526224
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 499526225}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &499526225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499526224}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.48, z: 0.032}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2502142005489989115}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1387828831687858384
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,8 +73,8 @@ GameObject:
   - component: {fileID: 2502142005489989115}
   - component: {fileID: 4162546305328502055}
   - component: {fileID: 7768594775247509734}
-  - component: {fileID: 6153050507451953200}
-  - component: {fileID: 167579388553295444}
+  - component: {fileID: 1382075801}
+  - component: {fileID: 1382075802}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -65,6 +96,7 @@ Transform:
   m_Children:
   - {fileID: 3558888954574516491}
   - {fileID: 4040987243153529431}
+  - {fileID: 499526225}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -80,6 +112,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a75e28413b1b0f4eb9e4cadef05446e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  life: 2
+  playerSpeed: 2
+  jumpHeight: 4
+  groundCheck: {fileID: 499526225}
+  ground:
+    serializedVersion: 2
+    m_Bits: 64
+  sizeGroundCheck: 0.3
 --- !u!114 &7768594775247509734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,25 +134,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootPosition: {fileID: 3558888954574516491}
   shootPrefab: {fileID: 8294019381813902272, guid: 7bde231055640e045a12c793885986f6, type: 3}
---- !u!143 &6153050507451953200
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3654028781045665792}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1.43
-  m_Radius: 0.29
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0
-  m_Center: {x: -0.01, y: 0, z: 0}
---- !u!54 &167579388553295444
+  chargingCoolDown: 2
+--- !u!54 &1382075801
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,6 +151,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &1382075802
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3654028781045665792}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.30902725
+  m_Height: 1.5372407
+  m_Direction: 1
+  m_Center: {x: 1.4940158e-16, y: 0.044929862, z: 0.07301319}
 --- !u!1001 &4584313683646119356
 PrefabInstance:
   m_ObjectHideFlags: 0
