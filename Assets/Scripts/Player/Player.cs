@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask ground;
     [SerializeField] private float sizeGroundCheck = 1.0f;
+
+    [SerializeField] private float coldDownWallJumping = 1;
+    private bool canWallJump = true;
     
     private Rigidbody rb;
 
@@ -67,5 +70,25 @@ public class Player : MonoBehaviour
         }
         
         return life;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (!IsGrounded() && collision.contacts[0].normal.y < 0.1f)
+        {
+            if (Input.GetButton("Jump") && canWallJump)
+            {
+                Debug.DrawRay(collision.contacts[0].point, collision.contacts[0].normal, Color.red, 1.25f);
+                rb.AddForce(new Vector3(collision.contacts[0].normal.x * 8, 0, 0), ForceMode.Impulse);
+                rb.velocity = new Vector3(collision.contacts[0].normal.x * 8, jumpHeight, rb.velocity.z);
+                canWallJump = false;
+                Invoke(nameof(SetWallJumpTrue), coldDownWallJumping);
+            }
+        }
+    }
+
+    private void SetWallJumpTrue()
+    {
+        canWallJump = true;
     }
 }

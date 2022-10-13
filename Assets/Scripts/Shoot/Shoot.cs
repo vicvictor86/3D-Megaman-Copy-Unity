@@ -19,7 +19,6 @@ public class Shoot : MonoBehaviour
     {
         rgBody = gameObject.GetComponent<Rigidbody>();
         rgBody.velocity = shootDirection;
-        
     }
 
     private void Update()
