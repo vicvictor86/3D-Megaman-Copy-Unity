@@ -5,11 +5,17 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    protected enum Facing
+    protected enum HorizontalFacing
     {
         Left,
-        Right
-    } 
+        Right,
+    }
+
+    protected enum VerticalFacing
+    {
+        Up,
+        Down
+    }
     
     [SerializeField] protected int life = 2;
     [SerializeField] protected int damage = 1;
@@ -21,7 +27,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float coolDownFire = 2;
     [SerializeField] protected float shootSpeed = 1;
     
-    protected Facing facing = Facing.Right;
+    protected HorizontalFacing horizontalFacing = HorizontalFacing.Right;
+    protected VerticalFacing verticalFacing = VerticalFacing.Down;
     protected bool isViewingPlayer;
     
     protected Vector3 sphereCenter;

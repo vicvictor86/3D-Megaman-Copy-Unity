@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HorizontalEnemy : Enemy
+public class JumperEnemy : Enemy
 {
+    [SerializeField] private float jumpHeight = 1;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float sizeGroundCheck = 1;
+    [SerializeField] private LayerMask ground;
+    
     private new void Start()
     {
         base.Start();
-        StartCoroutine(ChangeDirection(1f));
+        StartCoroutine(LoopingJump(1f));
     }
     
     private void Update()
     {
-        Move();
-
         fireTime += Time.deltaTime;
         
         SearchPlayer();
@@ -45,17 +48,7 @@ public class HorizontalEnemy : Enemy
         sphereCenter = new Vector3(position.x, position.y, position.z);
         return Physics.OverlapSphere(sphereCenter, rangeVision);
     }
-    
-    protected override void Move()
-    {
-        if (!isViewingPlayer)
-        {
-            var velocity = Rb.velocity;
-            var moveDirection = horizontalFacing == HorizontalFacing.Left ? -1 : 1;
-            Rb.velocity = new Vector3(speed * moveDirection, velocity.y, velocity.z);
-        }
-    }
-    
+
     protected override void LookToPlayer(Component player)
     {
         var moveDirection = (player.transform.position - transform.position).normalized;
@@ -64,17 +57,38 @@ public class HorizontalEnemy : Enemy
             RotateEnemy();
         }
     }
+
+    private void Jump()
+    {
+        if (IsGrounded())
+        {
+            var velocity = Rb.velocity;
+            velocity = new Vector3(velocity.x, jumpHeight, velocity.z);
+            Rb.velocity = velocity;
+        }
+    }
     
-    protected override IEnumerator ChangeDirection(float coolDownChangeDirection)
+    private IEnumerator LoopingJump(float coolDownJump)
     {
         while (true)
         {
-            yield return new WaitForSeconds(coolDownChangeDirection);
+            yield return new WaitForSeconds(coolDownJump);
             if (!isViewingPlayer)
             {
-                RotateEnemy();
+                Jump();
             }
         }
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, sizeGroundCheck);
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.CheckSphere(groundCheck.position, sizeGroundCheck, ground);
     }
     
     protected new virtual void RotateEnemy()

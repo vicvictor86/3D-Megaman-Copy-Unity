@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4776884020672340819}
   m_Layer: 0
-  m_Name: HorizontalEnemy
+  m_Name: VerticalEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 74ca58a7fee9d3344bd175d69eaf41de, type: 3}
       propertyPath: m_Name
-      value: horizontalAirPlane
+      value: VerticalAirPlane
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 74ca58a7fee9d3344bd175d69eaf41de, type: 3}
       propertyPath: m_TagString
@@ -170,7 +170,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 14.035845, y: 3.7396255, z: 7.338754}
   m_Center: {x: 0, y: 2.0966632, z: 0}
---- !u!114 &3902862002590242831
+--- !u!114 &1255478057487429588
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4972846075497570226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70e045e9324ee2444b33bc0e17b29bd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6aaf894d71862a34198bf17db630a458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   life: 2
@@ -188,7 +188,8 @@ MonoBehaviour:
   rangeVision: 2
   shootPosition: {fileID: 5314934726230755860}
   shootPrefab: {fileID: 8294019381813902272, guid: 7bde231055640e045a12c793885986f6, type: 3}
-  coldDownFire: 2
+  coolDownFire: 2
+  shootSpeed: 1
 --- !u!4 &5640980102424167688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 74ca58a7fee9d3344bd175d69eaf41de, type: 3}

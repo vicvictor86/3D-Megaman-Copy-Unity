@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HorizontalEnemy : Enemy
+public class VerticalEnemy : Enemy
 {
+
+    private bool needHorizontalRotation;
     private new void Start()
     {
         base.Start();
@@ -51,17 +53,29 @@ public class HorizontalEnemy : Enemy
         if (!isViewingPlayer)
         {
             var velocity = Rb.velocity;
-            var moveDirection = horizontalFacing == HorizontalFacing.Left ? -1 : 1;
-            Rb.velocity = new Vector3(speed * moveDirection, velocity.y, velocity.z);
+            var moveDirection = verticalFacing == VerticalFacing.Down ? -1 : 1;
+            Rb.velocity = new Vector3(velocity.x, speed * moveDirection, velocity.z);
+        }
+        else
+        {
+            Rb.velocity = Vector3.zero;
         }
     }
     
     protected override void LookToPlayer(Component player)
     {
         var moveDirection = (player.transform.position - transform.position).normalized;
-        if (moveDirection.x < 0 && horizontalFacing == HorizontalFacing.Right || moveDirection.x > 0 && horizontalFacing == HorizontalFacing.Left)
+        needHorizontalRotation = moveDirection.x < 0 && horizontalFacing == HorizontalFacing.Right ||
+                                 moveDirection.x > 0 && horizontalFacing == HorizontalFacing.Left;
+        
+        if (needHorizontalRotation)
         {
-            RotateEnemy();
+            RotateInHorizontal();
+        }
+        
+        if (moveDirection.y < 0 && verticalFacing == VerticalFacing.Up || moveDirection.y > 0 && verticalFacing == VerticalFacing.Down)
+        {
+            RotateInVertical();
         }
     }
     
@@ -72,12 +86,17 @@ public class HorizontalEnemy : Enemy
             yield return new WaitForSeconds(coolDownChangeDirection);
             if (!isViewingPlayer)
             {
-                RotateEnemy();
+                RotateInVertical();
             }
         }
     }
     
-    protected new virtual void RotateEnemy()
+    protected new virtual void RotateInVertical()
+    {
+        verticalFacing = verticalFacing == VerticalFacing.Up ? VerticalFacing.Down : VerticalFacing.Up;
+    }
+
+    private void RotateInHorizontal()
     {
         gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
         horizontalFacing = horizontalFacing == HorizontalFacing.Left ? HorizontalFacing.Right : HorizontalFacing.Left;

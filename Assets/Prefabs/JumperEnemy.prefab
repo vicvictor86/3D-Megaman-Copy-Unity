@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1478305335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1478305336}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1478305336
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478305335}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.31, z: -0.33}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5640980102424167688}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2940093981361790621
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4776884020672340819}
   m_Layer: 0
-  m_Name: HorizontalEnemyTeste
+  m_Name: JumperEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 74ca58a7fee9d3344bd175d69eaf41de, type: 3}
       propertyPath: m_Name
-      value: horizontalAirPlane
+      value: VerticalAirPlane
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 74ca58a7fee9d3344bd175d69eaf41de, type: 3}
       propertyPath: m_TagString
@@ -170,7 +201,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 14.035845, y: 3.7396255, z: 7.338754}
   m_Center: {x: 0, y: 2.0966632, z: 0}
---- !u!114 &3902862002590242831
+--- !u!114 &116550931361736632
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,7 +210,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4972846075497570226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70e045e9324ee2444b33bc0e17b29bd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 44c74ad0be95af14f8b5f3b60d671293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   life: 2
@@ -188,7 +219,14 @@ MonoBehaviour:
   rangeVision: 2
   shootPosition: {fileID: 5314934726230755860}
   shootPrefab: {fileID: 8294019381813902272, guid: 7bde231055640e045a12c793885986f6, type: 3}
-  coldDownFire: 2
+  coolDownFire: 2
+  shootSpeed: 1
+  jumpHeight: 7
+  groundCheck: {fileID: 1478305336}
+  sizeGroundCheck: 0.24
+  ground:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &5640980102424167688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 74ca58a7fee9d3344bd175d69eaf41de, type: 3}
