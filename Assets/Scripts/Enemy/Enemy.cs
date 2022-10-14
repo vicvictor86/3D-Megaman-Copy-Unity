@@ -5,59 +5,47 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private enum Facing
+    protected enum Facing
     {
         Left,
         Right
     } 
     
-    [SerializeField] private int life = 2;
-    [SerializeField] private int damage = 1;
+    [SerializeField] protected int life = 2;
+    [SerializeField] protected int damage = 1;
+    [SerializeField] protected float speed = 1;
     
-    [SerializeField] private float rangeVision = 1;
-    [SerializeField] private Transform shootPosition;
-    [SerializeField] private GameObject shootPrefab;
-    [SerializeField] private float coldDownFire = 2;
-    private Facing facing = Facing.Right;
+    [SerializeField] protected float rangeVision = 1;
+    [SerializeField] protected Transform shootPosition;
+    [SerializeField] protected GameObject shootPrefab;
+    [SerializeField] protected float coolDownFire = 2;
+    [SerializeField] protected float shootSpeed = 1;
     
-    private Vector3 sphereCenter;
-    private float fireTime = 0;
-    private bool firstShoot = true;
+    protected Facing facing = Facing.Right;
+    protected bool isViewingPlayer;
+    
+    protected Vector3 sphereCenter;
+    protected float fireTime;
+    protected bool firstShoot = true;
 
-    private Rigidbody rb;
+    protected Rigidbody Rb;
     
-    private void Start()
+    protected void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
+        Rb = gameObject.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    private void Update()
+    protected virtual void SearchPlayer()
     {
-
-        var insideVision = ObjectsInEnemyVision();
-
-        fireTime += Time.deltaTime;
-        foreach (var entity in insideVision)
-        {
-            if (entity.CompareTag("Player"))
-            {
-                LookToPlayer(entity);
-
-                if (fireTime >= coldDownFire || firstShoot)
-                {
-                    Shoot(entity);
-                    firstShoot = false;
-                }
-            }
-        }
     }
 
-    private IEnumerable<Collider> ObjectsInEnemyVision()
+    protected virtual void Move()
     {
-        var position = transform.position;
-        sphereCenter = new Vector3(position.x, position.y, position.z);
-        return Physics.OverlapSphere(sphereCenter, rangeVision);
+    }
+    
+    protected virtual IEnumerable<Collider> ObjectsInEnemyVision()
+    {
+        return null;
     }
     
     private void OnDrawGizmosSelected()
@@ -66,23 +54,21 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(sphereCenter, rangeVision);
     }
 
-    private void LookToPlayer(Component player)
+    protected virtual void LookToPlayer(Component player)
     {
-        var moveDirection = (player.transform.position - transform.position).normalized;
-        if (moveDirection.x < 0 && facing == Facing.Right || moveDirection.x > 0 && facing == Facing.Left)
-        {
-            gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
-            facing = facing == Facing.Left ? Facing.Right : Facing.Left;
-        }
+    }
+
+    protected virtual void RotateEnemy()
+    {
     }
     
-    private void Shoot(Component target)
+    protected virtual void Shoot(Component target)
     {
         var positionShoot = shootPosition.position;
         var moveDirection = (target.transform.position - positionShoot).normalized;
         
         var shoot = Instantiate(shootPrefab, positionShoot, Quaternion.identity).GetComponent<Shoot>();
-        shoot.SetProperties(moveDirection, "Player", damage);
+        shoot.SetProperties(moveDirection * shootSpeed, "Player", damage);
         
         fireTime = 0;
     }
@@ -97,5 +83,10 @@ public class Enemy : MonoBehaviour
         }
         
         return life;
+    }
+
+    protected virtual IEnumerator ChangeDirection(float coolDownChangeDirection)
+    {
+        return null;
     }
 }

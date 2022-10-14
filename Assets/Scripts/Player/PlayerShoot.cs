@@ -31,13 +31,13 @@ public class PlayerShoot : MonoBehaviour
             {
                 var shoot = Instantiate(chargedShootPrefab, shootPosition.position, Quaternion.identity).GetComponent<Shoot>();
                 shoot.SetProperties(shootPosition.forward * ChargedShootSpeed, "Enemy", ChargedShootDamage);
-                chargingTime = 0;
             }
             else
             {
                 var shoot = Instantiate(normalShootPrefab, shootPosition.position, Quaternion.identity).GetComponent<Shoot>();
                 shoot.SetProperties(shootPosition.forward * NormalShootSpeed, "Enemy", NormalShootDamage);
             }
+            chargingTime = 0;
         }
     }
 
