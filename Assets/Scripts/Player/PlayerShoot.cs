@@ -6,16 +6,18 @@ using UnityEngine.UIElements;
 
 public class PlayerShoot : MonoBehaviour
 {
-    private int damage = 1;
-    private float speed = 2;
+    private const int NormalShootDamage = 1;
+    private const int ChargedShootDamage = 2;
+    private const float NormalShootSpeed = 2;
+    private const float ChargedShootSpeed = 4;
     
     [SerializeField] private Transform shootPosition;
-    [SerializeField] private GameObject shootPrefab;
+    [SerializeField] private GameObject normalShootPrefab;
+    [SerializeField] private GameObject chargedShootPrefab;
     
     [SerializeField] private float chargingCoolDown = 2;
     private float chargingTime;
-
-    // Update is called once per frame
+    
     private void Update()
     {
         if (Input.GetKey(KeyCode.J))
@@ -27,11 +29,15 @@ public class PlayerShoot : MonoBehaviour
         {
             if (chargingTime >= chargingCoolDown)
             {
+                var shoot = Instantiate(chargedShootPrefab, shootPosition.position, Quaternion.identity).GetComponent<Shoot>();
+                shoot.SetProperties(shootPosition.forward * ChargedShootSpeed, "Enemy", ChargedShootDamage);
                 chargingTime = 0;
             }
-            
-            var shoot = Instantiate(shootPrefab, shootPosition.position, Quaternion.identity).GetComponent<Shoot>();
-            shoot.SetProperties(shootPosition.forward * speed, "Enemy", damage);
+            else
+            {
+                var shoot = Instantiate(normalShootPrefab, shootPosition.position, Quaternion.identity).GetComponent<Shoot>();
+                shoot.SetProperties(shootPosition.forward * NormalShootSpeed, "Enemy", NormalShootDamage);
+            }
         }
     }
 

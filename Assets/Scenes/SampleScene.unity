@@ -502,14 +502,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1382075801, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
-      propertyPath: m_Constraints
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 1382075802, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 561af91e17988254895c8f1dc1d44cf7, type: 2}
     - target: {fileID: 2502142005489989115, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -559,9 +551,17 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4162546305328502055, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
-      propertyPath: coldDownWallJumping
-      value: 0.45
+      propertyPath: flickFrequency
+      value: 0.07
       objectReference: {fileID: 0}
+    - target: {fileID: 7768594775247509734, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
+      propertyPath: normalShootPrefab
+      value: 
+      objectReference: {fileID: 8294019381813902272, guid: 7bde231055640e045a12c793885986f6, type: 3}
+    - target: {fileID: 7768594775247509734, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
+      propertyPath: chargedShootPrefab
+      value: 
+      objectReference: {fileID: 8294019381813902272, guid: cf3206ab15d12a046a47ec2b7451a3ac, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e28a8d9a301197248a9fba964a732f1f, type: 3}
 --- !u!1001 &5314934725884149579

@@ -120,6 +120,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   sizeGroundCheck: 0.3
+  coldDownWallJumping: 0.45
+  flickFrequency: 0.07
+  coldDownInvincibility: 2
 --- !u!114 &7768594775247509734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,7 +136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootPosition: {fileID: 3558888954574516491}
-  shootPrefab: {fileID: 8294019381813902272, guid: 7bde231055640e045a12c793885986f6, type: 3}
+  normalShootPrefab: {fileID: 8294019381813902272, guid: 7bde231055640e045a12c793885986f6, type: 3}
+  chargedShootPrefab: {fileID: 8294019381813902272, guid: cf3206ab15d12a046a47ec2b7451a3ac, type: 3}
   chargingCoolDown: 2
 --- !u!54 &1382075801
 Rigidbody:
@@ -149,7 +153,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!136 &1382075802
 CapsuleCollider:
@@ -158,7 +162,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654028781045665792}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 561af91e17988254895c8f1dc1d44cf7, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.30902725
