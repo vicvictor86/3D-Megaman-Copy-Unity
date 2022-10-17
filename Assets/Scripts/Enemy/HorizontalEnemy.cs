@@ -7,7 +7,7 @@ public class HorizontalEnemy : Enemy
     private new void Start()
     {
         base.Start();
-        StartCoroutine(ChangeDirection(1f));
+        StartCoroutine(ChangeDirection());
     }
     
     private void Update()
@@ -39,13 +39,6 @@ public class HorizontalEnemy : Enemy
         }
     }
 
-    protected override IEnumerable<Collider> ObjectsInEnemyVision()
-    {
-        var position = transform.position;
-        sphereCenter = new Vector3(position.x, position.y, position.z);
-        return Physics.OverlapSphere(sphereCenter, rangeVision);
-    }
-    
     protected override void Move()
     {
         if (!isViewingPlayer)
@@ -58,28 +51,18 @@ public class HorizontalEnemy : Enemy
     
     protected override void LookToPlayer(Component player)
     {
-        var moveDirection = (player.transform.position - transform.position).normalized;
-        if (moveDirection.x < 0 && horizontalFacing == HorizontalFacing.Right || moveDirection.x > 0 && horizontalFacing == HorizontalFacing.Left)
-        {
-            RotateEnemy();
-        }
+        LookToPlayerHorizontally(player);
     }
     
-    protected override IEnumerator ChangeDirection(float coolDownChangeDirection)
+    protected override IEnumerator ChangeDirection()
     {
         while (true)
         {
             yield return new WaitForSeconds(coolDownChangeDirection);
             if (!isViewingPlayer)
             {
-                RotateEnemy();
+                RotateInHorizontal();
             }
         }
-    }
-    
-    protected new virtual void RotateEnemy()
-    {
-        gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
-        horizontalFacing = horizontalFacing == HorizontalFacing.Left ? HorizontalFacing.Right : HorizontalFacing.Left;
     }
 }

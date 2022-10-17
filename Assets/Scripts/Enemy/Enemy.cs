@@ -17,18 +17,29 @@ public class Enemy : MonoBehaviour
         Down
     }
     
+    protected enum DepthFacing
+    {
+        Inside,
+        Out
+    }
+    
+    [Header("Basic Properties")]
     [SerializeField] protected int life = 2;
     [SerializeField] protected int damage = 1;
     [SerializeField] protected float speed = 1;
-    
+    [SerializeField] protected float shootSpeed = 1;
+    [SerializeField] protected int armor = 0;
+
+    [Header("Specific Properties")]
     [SerializeField] protected float rangeVision = 1;
+    [SerializeField] protected float coolDownFire = 2;
+    [SerializeField] protected float coolDownChangeDirection = 1;
     [SerializeField] protected Transform shootPosition;
     [SerializeField] protected GameObject shootPrefab;
-    [SerializeField] protected float coolDownFire = 2;
-    [SerializeField] protected float shootSpeed = 1;
     
     protected HorizontalFacing horizontalFacing = HorizontalFacing.Right;
     protected VerticalFacing verticalFacing = VerticalFacing.Down;
+    protected DepthFacing depthFacing = DepthFacing.Inside;
     protected bool isViewingPlayer;
     
     protected Vector3 sphereCenter;
@@ -52,7 +63,9 @@ public class Enemy : MonoBehaviour
     
     protected virtual IEnumerable<Collider> ObjectsInEnemyVision()
     {
-        return null;
+        var position = transform.position;
+        sphereCenter = new Vector3(position.x, position.y, position.z);
+        return Physics.OverlapSphere(sphereCenter, rangeVision);
     }
     
     private void OnDrawGizmosSelected()
@@ -65,8 +78,18 @@ public class Enemy : MonoBehaviour
     {
     }
 
-    protected virtual void RotateEnemy()
+    protected Vector3 LookToPlayerHorizontally(Component player)
     {
+        var moveDirection = (player.transform.position - transform.position).normalized;
+        var needHorizontalRotation = moveDirection.x < 0 && horizontalFacing == HorizontalFacing.Right ||
+                                 moveDirection.x > 0 && horizontalFacing == HorizontalFacing.Left;
+        
+        if (needHorizontalRotation)
+        {
+            RotateInHorizontal();
+        }
+
+        return moveDirection;
     }
     
     protected virtual void Shoot(Component target)
@@ -82,7 +105,9 @@ public class Enemy : MonoBehaviour
 
     public int TakeDamage(int damageTaken)
     {
-        life -= damageTaken;
+        var damageMitigated = damageTaken - armor;
+        damageMitigated = damageMitigated < 0 ? 0 : damageMitigated;
+        life -= damageMitigated;
         
         if (life <= 0)
         {
@@ -91,8 +116,14 @@ public class Enemy : MonoBehaviour
         
         return life;
     }
+    
+    protected void RotateInHorizontal()
+    {
+        gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
+        horizontalFacing = horizontalFacing == HorizontalFacing.Left ? HorizontalFacing.Right : HorizontalFacing.Left;
+    }
 
-    protected virtual IEnumerator ChangeDirection(float coolDownChangeDirection)
+    protected virtual IEnumerator ChangeDirection()
     {
         return null;
     }

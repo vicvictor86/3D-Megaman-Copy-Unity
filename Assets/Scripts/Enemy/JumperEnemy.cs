@@ -41,21 +41,10 @@ public class JumperEnemy : Enemy
             }
         }
     }
-
-    protected override IEnumerable<Collider> ObjectsInEnemyVision()
-    {
-        var position = transform.position;
-        sphereCenter = new Vector3(position.x, position.y, position.z);
-        return Physics.OverlapSphere(sphereCenter, rangeVision);
-    }
-
+    
     protected override void LookToPlayer(Component player)
     {
-        var moveDirection = (player.transform.position - transform.position).normalized;
-        if (moveDirection.x < 0 && horizontalFacing == HorizontalFacing.Right || moveDirection.x > 0 && horizontalFacing == HorizontalFacing.Left)
-        {
-            RotateEnemy();
-        }
+        LookToPlayerHorizontally(player);
     }
 
     private void Jump()
@@ -89,11 +78,5 @@ public class JumperEnemy : Enemy
     private bool IsGrounded()
     {
         return Physics.CheckSphere(groundCheck.position, sizeGroundCheck, ground);
-    }
-    
-    protected new virtual void RotateEnemy()
-    {
-        gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
-        horizontalFacing = horizontalFacing == HorizontalFacing.Left ? HorizontalFacing.Right : HorizontalFacing.Left;
     }
 }

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VerticalEnemy : Enemy
+public class DepthEnemy : Enemy
 {
-
     private bool needHorizontalRotation;
+    
     private new void Start()
     {
         base.Start();
@@ -41,13 +41,20 @@ public class VerticalEnemy : Enemy
         }
     }
 
+    protected override IEnumerable<Collider> ObjectsInEnemyVision()
+    {
+        var position = transform.position;
+        sphereCenter = new Vector3(position.x, position.y, position.z);
+        return Physics.OverlapSphere(sphereCenter, rangeVision);
+    }
+    
     protected override void Move()
     {
         if (!isViewingPlayer)
         {
             var velocity = Rb.velocity;
-            var moveDirection = verticalFacing == VerticalFacing.Down ? -1 : 1;
-            Rb.velocity = new Vector3(velocity.x, speed * moveDirection, velocity.z);
+            var moveDirection = depthFacing == DepthFacing.Inside ? -1 : 1;
+            Rb.velocity = new Vector3(velocity.x, velocity.y, speed * moveDirection);
         }
         else
         {
@@ -59,9 +66,9 @@ public class VerticalEnemy : Enemy
     {
         var moveDirection = LookToPlayerHorizontally(player);
         
-        if (moveDirection.y < 0 && verticalFacing == VerticalFacing.Up || moveDirection.y > 0 && verticalFacing == VerticalFacing.Down)
+        if (moveDirection.z < 0 && depthFacing == DepthFacing.Out || moveDirection.z > 0 && depthFacing == DepthFacing.Inside)
         {
-            RotateInVertical();
+            RotateInDepth();
         }
     }
     
@@ -72,13 +79,13 @@ public class VerticalEnemy : Enemy
             yield return new WaitForSeconds(coolDownChangeDirection);
             if (!isViewingPlayer)
             {
-                RotateInVertical();
+                RotateInDepth();
             }
         }
     }
     
-    protected virtual void RotateInVertical()
+    protected virtual void RotateInDepth()
     {
-        verticalFacing = verticalFacing == VerticalFacing.Up ? VerticalFacing.Down : VerticalFacing.Up;
+        depthFacing = depthFacing == DepthFacing.Inside ? DepthFacing.Out : DepthFacing.Inside;
     }
 }
