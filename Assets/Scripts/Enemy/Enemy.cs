@@ -29,8 +29,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int damage = 1;
     [SerializeField] protected float speed = 1;
     [SerializeField] protected float shootSpeed = 1;
-    [SerializeField] protected int armor = 0;
+    [SerializeField] protected int armor;
+    [SerializeField] protected float coldDownInvincibility = 1;
+    [SerializeField] protected float flickFrequency;
     protected bool canTakeDamage = true;
+    private SkinnedMeshRenderer[] enemyRenders;
 
     [Header("Specific Properties")] [SerializeField]
     protected float rangeVision = 1;
@@ -54,6 +57,7 @@ public class Enemy : MonoBehaviour
     protected void Start()
     {
         Rb = gameObject.GetComponent<Rigidbody>();
+        enemyRenders = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     protected virtual void SearchPlayer()
@@ -113,6 +117,10 @@ public class Enemy : MonoBehaviour
         var damageMitigated = damageTaken - armor;
         damageMitigated = damageMitigated < 0 ? 0 : damageMitigated;
         life -= damageMitigated;
+        
+        canTakeDamage = false;
+        StartCoroutine(FlickInvincibility());
+        Invoke(nameof(EnableCanTakeDamage), coldDownInvincibility);
 
         if (life <= 0)
         {
@@ -131,5 +139,26 @@ public class Enemy : MonoBehaviour
     protected virtual IEnumerator ChangeDirection()
     {
         return null;
+    }
+    
+    private IEnumerator FlickInvincibility()
+    {
+        while (!canTakeDamage)
+        {
+            foreach (var item in enemyRenders)
+            {
+                item.enabled = !item.enabled;
+            }
+            yield return new WaitForSeconds(flickFrequency);
+        }
+    }
+    
+    private void EnableCanTakeDamage()
+    {
+        canTakeDamage = true;
+        foreach (var item in enemyRenders)
+        {
+            item.enabled = true;
+        }
     }
 }

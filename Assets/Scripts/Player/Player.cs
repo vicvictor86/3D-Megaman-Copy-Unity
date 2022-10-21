@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CheckInFromWallColliding();
+        CheckInFrontWallColliding();
     }
 
     private void ChangeDirection()
@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void CheckInFromWallColliding()
+    private void CheckInFrontWallColliding()
     {
         RaycastHit hit;
         var inFrontHit = Physics.Raycast(inFront.position, inFront.TransformDirection(Vector3.forward), out hit, 0.1f, ground);
