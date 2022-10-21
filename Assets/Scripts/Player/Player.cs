@@ -28,13 +28,12 @@ public class Player : MonoBehaviour
     [Header("ColdDowns")]
     [SerializeField] private float coldDownWallJumping = 1;
     [SerializeField] private float flickFrequency = 0.25f;
+    [SerializeField] private float coldDownInvincibility = 1;
+    private bool isInvincible;
+    
     private bool canWallJump = true;
     
     private SkinnedMeshRenderer[] playerRenders;
-    private static readonly int Color1 = Shader.PropertyToID("_Color");
-
-    [SerializeField] private float coldDownInvincibility = 1;
-    private bool isInvincible;
 
     private Facing actualFacing = Facing.Right;
 
@@ -157,6 +156,14 @@ public class Player : MonoBehaviour
         canWallJump = true;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Physics.IgnoreCollision(collision.gameObject.GetComponent<Collider>(), GetComponent<Collider>());
+        }
+    }
+    
     private void DisableInvincibility()
     {
         isInvincible = false;
